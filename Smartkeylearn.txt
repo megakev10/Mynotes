@@ -1,0 +1,8 @@
+Ce bloc note est un recap de tout ce que j'apprends pendant mon travail sur le projet smart-key.
+
+Un SDK (software development kit) est un ensemble d'outils et de bibliotheques destines a faciliter le developpement d'un logiciel.
+Un framework est une structure predefinie offrant un cadre pour le developpement.
+Un firmware est la designation du code present dans un MCU, parfois il inclus aussi le OS s'il est present.
+Il existe deja un projet de reverse des serrures utilisant le protocol TTLock sur git, lien: https://github.com/Fusseldieb/ttlock-reverse-engineering.
+Pour utiliser le BLE avec python, la biblio "Bluez" est plutot bien faite. On l'appelle avec <<from bleak import les classes a utiliser(BleakScanner, BleakClient par exemple)>>.
+Pour filtrer uniquement les serrures, je me suis base sur l'uuid propre aux serrures: TTLOCK_SERVICE_UUID = "00001910-0000-1000-8000-00805f9b34fb".
