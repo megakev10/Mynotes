@@ -6,3 +6,19 @@ Un firmware est la designation du code present dans un MCU, parfois il inclus au
 Il existe deja un projet de reverse des serrures utilisant le protocol TTLock sur git, lien: https://github.com/Fusseldieb/ttlock-reverse-engineering.
 Pour utiliser le BLE avec python, la biblio "Bluez" est plutot bien faite. On l'appelle avec <<from bleak import les classes a utiliser(BleakScanner, BleakClient par exemple)>>.
 Pour filtrer uniquement les serrures, je me suis base sur l'uuid propre aux serrures: TTLOCK_SERVICE_UUID = "00001910-0000-1000-8000-00805f9b34fb".
+18/05/2026
+Bleak est structure sous forme d'objets, de classes et de methodes. Je ne maitrise pas encore l'oriente objet malheureusement, donc ma comprehension de ce concept est plutot vague.
+Une serrure possede des services (avec leurs uuid et handles). Pour chaque service, il y a des characteristiques (un peu comme des actions possibles) chacun reference et accessible via son handle.
+Un handle est une addresse (un numero ) qui represente une action possible. Donc si on veut realiser cette action, on utilise ce handle.
+Apparemment get_services pour voir les services dispo est depreciee pour les nouvelles versions de bleak, la decouverte est faite lors de la connexion et on fait juste "services = client.services".
+On travaille avec le mode asynchrone (asynch) pour les operations BLE, Je sais pas encore tres bien comment ca fonctionne.
+Quand on fait:
+try:
+    Test a effectuer
+except Exception as e:
+   En fait on fait: try:teste " Test a effectuer", except: si ca ne marche pas, Exception: pour n'importe quel type d'erreur, as e: stocker dans e. Ainsi, on peut afficher e apres.
+ Caractère	Signification
+\n	Nouvelle ligne (Enter)
+\t	Tabulation (indentation)
+\\	Afficher un vrai backslash
+\"	Afficher un guillemet (dans une chaîne entre guillemets)
