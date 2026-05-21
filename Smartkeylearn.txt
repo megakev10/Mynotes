@@ -5,12 +5,13 @@ Un framework est une structure predefinie offrant un cadre pour le developpement
 Un firmware est la designation du code present dans un MCU, parfois il inclus aussi le OS s'il est present.
 Il existe deja un projet de reverse des serrures utilisant le protocol TTLock sur git, lien: https://github.com/Fusseldieb/ttlock-reverse-engineering.
 Pour utiliser le BLE avec python, la biblio "Bluez" est plutot bien faite. On l'appelle avec <<from bleak import les classes a utiliser(BleakScanner, BleakClient par exemple)>>.
-Pour filtrer uniquement les serrures, je me suis base sur l'uuid propre aux serrures: TTLOCK_SERVICE_UUID = "00001910-0000-1000-8000-00805f9b34fb".
+Pour filtrer uniquement les serrures, je me suis base sur l'uuid propre aux serrures: TTLOCK_SERVICE_UUID = "00001910-0000-1000-8000-00805f9b34fb". 
+Pour une serrure, une fois le nom trouve, on inverse juste les couples des caracteres de la fin pour avoir l'adresse Mac.
 18/05/2026
 Bleak est structure sous forme d'objets, de classes et de methodes. Je ne maitrise pas encore l'oriente objet malheureusement, donc ma comprehension de ce concept est plutot vague.
 Une serrure possede des services (avec leurs uuid et handles). Pour chaque service, il y a des characteristiques (un peu comme des actions possibles) chacun reference et accessible via son handle.
 Un handle est une addresse (un numero ) qui represente une action possible. Donc si on veut realiser cette action, on utilise ce handle.
-Apparemment get_services pour voir les services dispo est depreciee pour les nouvelles versions de bleak, la decouverte est faite lors de la connexion et on fait juste "services = client.services".
+Apparemment get_services pour voir les services dispo est depreciee pour les nouvelles versions de bleak, la decouverte est faite lors de la connexion et on fait juste "services = client.services". La commande "pip show bleak" permet d'avoir les infos relatives au Bleak installe.
 On travaille avec le mode asynchrone (asynch) pour les operations BLE, Je sais pas encore tres bien comment ca fonctionne.
 Quand on fait:
 try:
@@ -22,3 +23,41 @@ except Exception as e:
 \t	Tabulation (indentation)
 \\	Afficher un vrai backslash
 \"	Afficher un guillemet (dans une chaîne entre guillemets)
+	Communication
+Le protocol de communication des serrures utilise une trame qui se presente de cette facon: TRAME COMPLÈTE :
+┌─────────────────────────────────────────────────────────────┐
+│ HEADER (visible)  │ PAYLOAD (caché/chiffré) │ CRC │ FOOTER  │
+└─────────────────────────────────────────────────────────────┘
+Le header s'etale sur 12 octets et se presente comme ceci:Position : 
+             0    1    2    3    4    5    6    7    8    9    10   11
+           ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
+Trame :    │ 7F │ 5A │ 05 │ 03 │ 02 │ 00 │ 01 │ 00 │ 01 │ 71 │ AA │ 10 │ ...
+           └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+C'est a dire:
+Position Numéro d'octet	Valeur	Rôle                    	    Explications
+Case 0	Octet 0	        0x7F	Header part 1			Indiquent le debut de la trame 
+Case 1	Octet 1		0x5A	Header part 2			Idem
+Case 2	Octet 2		0x05	Version				indique la version du protocol (v3 dans e cas-ci)
+Case 3	Octet 3		0x03	Sous-version			Du protocol
+Case 4	Octet 4		0x02	Scène				Precise le contexte d'execution (commande*notre cas*, diagnostic, config)
+Case 5	Octet 5		0x00	Group ID (premier octet)	Identifie le groupe genre toutes les serrures TTLock
+Case 6	Octet 6		0x01	Group ID (second octet)		Idem
+Case 7	Octet 7		0x00	Org ID (premier octet)		Identifie l'organisation qui a fabriqué la serrure
+Case 8	Octet 8		0x01	Org ID (second octet)		Idem
+Case 9	Octet 9		0x71	Commande (unlock)		commande envoyee. Ca change bien sur
+Case 10	Octet 10	0xAA	Type chiffrement		Peut etre AES*tres souvent* ou d'autre
+Case 11	Octet 11	0x10	Longueur du payload		longueur de la commande chiffree. Change aussi.
+Ce header est en debut de toute trame sinon la serrure ignore le message. Je dois donc ecrire un programme qui va coller le header aux messages que j'envoie a la serrure.
+19/05/2026
+Passage a l'action, j'ai etabli une communication avec une serrure.
+Dans une com normale, le payload est chiffre et le CRC est calcule sur la trame entiere. Apparemment, le footer est toujours  0D0A.
+Lorsqu'une serrure est appairee, elle echange une cle de chiffrement qui sera utilisee par la suite pour chiffrer le payload. Donc si je teste avec une serrure deja appairee (a l'app normalement), je dois trouver la cle qu'elle utilise (complexe) mais si je prend une cle totalement neuve (reinitialisee), je peux la configurer et echanger de cle avec elle. La 1ere trame dans ce cas ci sera une commande de check admin (octet 9 a 0x41), le payload est a 0x00 et donc les octets 10 et 11 du header aussi. Voici un 1er test:
+/home/kevin/Documents/My notes/Mynotes/picturess/check admin.png
+Trame envoyée : 7F5A05030200000000410000660D0A
+ RÉPONSE reçue (handle 0000fff4-0000-1000-8000-00805f9b34fb (Handle: 11): Vendor specific) : 7F5A05030900010001540010543F1F4CC888DF4737E4283B1D0E5319390D0A
+ Pour calculer le crc, on utilise la biblio crc8 installee via : pip install crc8 bleak. Sauf que Ubuntu ne permet pas certaines installation via pip (le systeme utilise python lui meme et refuse donc par mesure de precaution, pour eviter qu'une installation ne destabilise son python). Il faut donc utiliser un venv: python3 -m venv ~/smart-key_env et l'activer: source ~/smart-key_env/bin/activate.
+ apt sert a installer des packages depuis le depot Ubuntu. Ces paquets sont testes et sur pour le systeme mais parfois pas a jour.
+ pip sert a installer des packages (biblios particulierement) de python depuis PyPI. Toutes les biblios officielles sont la et a jour.
+Maintenant reste plus que l'echange de cles.
+J'ai recu une serrure toute neuve et j'ai teste mon script de "check admin" dessus mais la reponse est assez surprenante: Reponse recue (handle 0000fff4-0000-1000-8000-00805f9b34fb (Handle: 11): Vendor specific) : 7F5A05030900010001540000710D0A
+C'est 15 octets et la question c'est qu'est ce qui manque? le payload ou le crc? Sauf que le calcul du crc donne 96 pas 71. Et si la serrure neuve se comporte autrement? Je vais envoyer une trame avec ma cle perso pour voir comment ca repond. 
