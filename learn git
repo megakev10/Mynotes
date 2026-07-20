@@ -1,0 +1,11 @@
+Samedi 11/07/2026
+
+>> "git config" permet de configurer des infos sur github. On a:
+	- "git config -- global user.name "username"": configure le nom
+	- "git config --global user.email "useremail"": configure l'email
+	- "git config --list" pour voir les infos enregistrees par git.
+>> le "--global" c'est pour une config globale sur git. On peut faire "--local" pour un projet specifique.
+>> "git --help" detaille vraiment bien les commandes de git.
+>> Une recherche sur google du type "git username" donne de tres bon resultats.
+>> "git log" donne la liste des commits qui ont ete fais dans un projet.
+>> "git show" donne des infos sur le dernier commit (surtoutn les differences apportees).

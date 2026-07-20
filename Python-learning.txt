@@ -1,0 +1,63 @@
+Vendredi 15 Mai 2026
+Je reprend mon etude de python et ce soir voici ce que j'ai appris:
+>> Avec "input" genre A= input("entrez une valeur"), la valeur entree est toujours de type string. Mais en faisant A=int(input("entrez une valeur")), on obtient un int.
+>>Pour les operateurs, il y a des operateurs composes genre A **=2 <=> A= A**2 (A puissance 2).
+>> Pour les conditions et les comparaisons, on peut affecter directement le resultat a une variable genre A = 12>3 (A = True) ou A = B and C (B et C etant aussi des conditions; si B=True et C=False, A=False)
+Lundi 18 Mai 2026
+  >> la structure sequentielle est celle pour laquelle toutes les intructions sont executees, l'une apres l'autre.
+  >> la structure conditionnelle c'est quand on execute en fonction des coditions
+  >> Il existe une structure tres interessante appelee operateur ternaire, c'est du style : valeur_si_vrai if cond else valeur_si_faux.
+Mercredi 20 Mai 2026
+  >> La syntaxe d'un for est : for compteur in sequence. Le compteur est une variable et la sequence est un ensemble de valeurs regroupees en une seule variable. 
+  >> une sequence peut etre une liste, une chaine de caracteres (chaque caractere est une valeur), etc 
+  >> On peut ecrire for compteur in range(n,m,p) avec n= nombre de valeurs a prendre, m= derniere valeur+1 (si m non specifie, on va de 0 a n-1) et p= le pas (p=1 par defaut)
+  >> print("message",end=" ") signifie: apres avoir ecris "message", ne vas pas a la ligne, met juste un espace. Si on fait end="##", ca mettra plutot l'espace a la suite. Donc il definit ce qui va etre mis 
+  a la suite et s'il y a un autre print, il suit directement.
+Jeudi 21/05/2026
+  >> La declaration d'une fonction est introduite par "def" genre "def nom_fonction(arg1,arg2,...):"
+  >> Une fonction peut : 
+    - Ne pas prendre d'arguments/parametres et ne rien retourner. On l'appelle avec "nom_fonction()"
+    - Ne pas prendre d'arguments/parametres et retourner quelque chose . On l'appelle avec "x = nom_fonction()" avec x une variable. 
+    - Prendre des arguments/parametres et ne rien retourner. On l'appelle avec "nom_fonction(arg1,arg2,...)"
+    - Prendre des arguments/parametres et retourner quelque chose. On l'appelle avec "x = nom_fonction(arg1,arg2,...)"
+  >> Quand on ecrit "return a", a est une variable locale ou un argument de la fonction.
+Vendredi 22/05/2026
+>> Une variable/ un argument dans une fonction est local a celle ci et differrent de toute autre qui porte le meme nom qu'elle en dehors de la fonction.
+>> Si une variable est precedee de "global" dans sa declaration alors elle est valable dans tout le programme.
+>> A l'execution, python ignore les declarations de fonction et n'y revient que lorsqu'elles sont appelees.
+>> En POO, on definit une classe comme ceci: class nom_classe:
+>> Les attributs d'une classe gardent la meme valeur pour les objets a moins qu'on les change.
+>> On definit un objet comme ceci: nom_objet = nom_classe()
+>> Une methode est une fonction appartenant a une classe
+>> La methode "__init__" permet de placer directement les valeurs de attributs pour un objet. On peut alors declarer l'objet comme ceci: nom_objet = nom_classe(attribut1, attribut2,...). 
+>> __init__ prend le parametre "self" qui remplace en fait l'objet dans la fonction.
+Mercredi 27/05/2026
+>> En python, une liste est une structure de donnee pouvant contenir des elements de types differrents
+>> On declare une liste de 03 facons:
+    - Nom_liste = [elements]
+    - Nom_liste = list((elements))
+    - Nom_liste = list(range()). Range a deja ete vu avec "for"
+>> Pour afficher la liste: print(Nom_liste). Pour afficher un element precis: print(Nom_liste[index])
+>> Il y a l'indexation positive: on va du debut a la fin en commencant par "0"; et l'indexation negative: de la fin vers le debut en commencant 
+par -1.
+Rattrapage sur les modules
+>> Un module c'est juste un fichier avec un ensemble de fonctions predefinies et qu'on peut appeler dans un programme
+>> Appel:
+    - "from Nom_module import*", importe toutes les fonctions du module. On peut donc toutes les appeller.
+    - "from Nom_module import nom_fonction", importe la fonction indiquee uniquement
+    - "from Nom_module import nom_fonction as allias_choisi", importe la fonction indiquee et change son nom par l'allias_choisi
+    - "import Nom_module as allias_choisi" on se comprend
+>> Pour utiliser une fonction d'un module, on fait "Nom_module.nom_fonction()", tout depend maintenat de la fonction en elle meme, on a deja
+vu ca.
+Dimanche 07/06/2026
+operations sur les listes 
+>> liste[m:n:p] signifie, considere les elts de la liste a partir de l'elt m jusqu'a n-1 avec un pas de p. On parle de tranches.
+>> liste[m:n:p] = [v1,v2,...] remplace juste les elts concernes
+>> Si le nombre d'elts a ajouter est plus grand/plus petit que la taille de la tranche consideree, elle juste aggrandie/reduite
+>> Le pas negatif signifie juste "parcors en sens inverse"
+>> Si m, n ou p ne sont pas precises, ils valent par defaut 0, fin et 1.
+Lundi 08/06/2026
+methodes et fonctions sur les listes
+>> il existe vraiment plein de methodes et de fonctions sur les listes, j'en ai detaille une bonne partie dans mf.py
+>> Juste un truc: liste.sort(key = , reverse = ); key est une specification de triage (par exemple "upper" pour tout mettre en 
+majuscule avant de trier) et reverse c'est pour inverser (True). Par defaut ils ne sont pas consideres.
