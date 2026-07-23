@@ -9,3 +9,7 @@ Samedi 11/07/2026
 >> Une recherche sur google du type "git username" donne de tres bon resultats.
 >> "git log" donne la liste des commits qui ont ete fais dans un projet.
 >> "git show" donne des infos sur le dernier commit (surtoutn les differences apportees).
+
+Lundi 20/07/2026
+
+>> "git remote add origin URL_DU_REPO" permet de lier un dossier git local a un repo a distante.

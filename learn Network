@@ -1,0 +1,46 @@
+lundi 20/06/2026
+
+Aujourd'hui debute mon aventure avec le reseau informatique.
+
+>> le "switch" est un appareil qui permet de mettre en reseau plus de 02 PC en utilisant des cables.
+>> A la difference du "hub", avec un "switch", les donnees envoyees vers un destinataire ne sont recues que par lui.
+>> Dans un reseau, les qppqreils peuvent savoir s'ils sont en local ou dans un reseau etendu (WAN) grace au masque de sous reseau. Par exemple --PC1: 192.168.13.4; PC2: 192.168.13.8; PC3: 192.168.5.12 et le masque de sous reseau est 
+255.255.255.0-- En fait PC1 et PC2 sont en reseau local (LAN) et PC3 est sur un reseau plus etendu. ?? Le masque ici "255.255.255.0" signifie que si les addr ip ont les memes 3 premiers nombres, ils sont dans le meme reseau.
+>> Le routeur est le composant qui assure la connexcion entre unreseau local et un autre ou avec un  WAN, tres souvent internet.
+>> le routeur possede un serveur DHCP pour attribuer des addresses ip dynamiques aux appareils qui lui sont connectes, mais on peut toujours utiliser des addr statiques ( pour des cas critiques comme des serveurs)
+>> Pour etablir un reseau, on peut utiliser:
+	- Des cables Ethernet (RJ445): connexion fiable, mais limite de portee a 100 m pour garder une bonne com.
+	- Un WiFi: Ondes radios a 2.4 GHz ( lent, robuste) ou a 5G (plus rapide mais faible portee et faible robustesse).
+	- Des CPL (courants porteurs de ligne): On profite directement des instrallations elevtriques pour transporter les signaux. Pas tres fiable, connecteeurs specialises mis sur la meme phase
+
+Jeudi 23/07/2026
+
+Modele OSI.
+>> Le modele OSI(Open systems interconnection) est une norme conceptuelle qui divise la communication reseau en 07 couches.  
+>> Ces couches se presentent ainsi:
+
+	Couche			A l'emission											A la reception						Protocoles
+
+7. Application       L'application crée les données à envoyer (HTTP, e-mail, etc.)					L'application utilise les données reçues.				HTTP, HTTPS, FTP, SMTP, DNS, MQTT
+
+6. Présentation	     Chiffre, compresse ou convertit les données dans un format standard.				Déchiffre, décompresse et reconvertit les données.			TLS/SSL, JPEG, PNG, ASCII, UTF-8
+
+5. Session		Ouvre, gère et synchronise la session de communication.						Maintient ou ferme la session.						RPC, NetBIOS, SIP
+
+4. Transport		Découpe les données en segments et assure leur livraison (ou non).				Réassemble les segments et vérifie leur intégrité.			TCP, UDP
+	
+3. Réseau		Ajoute les adresses IP et choisit le chemin vers le destinataire.				Lit l'adresse IP et remet le paquet à la couche transport.		IPv4, IPv6, ICMP
+
+2. Liaison de données	Encapsule le paquet dans une trame, ajoute les adresses MAC et détecte les erreurs locales.	Vérifie la trame, contrôle les erreurs et extrait le paquet IP.		Ethernet (IEEE 802.3), Wi-Fi (IEEE 802.11), PPP
+
+1. Physique		Transforme les bits en signaux électriques, lumineux ou en ondes radio et les transmet.		Transforme les signaux reçus en bits et  envoie à la couche liaison. 	Ethernet (partie physique), Wi-Fi (partie radio), Fibre optique, Bluetooth
+
+Une remarque très importante, les données changent de "nom" au fur et à mesure qu'elles descendent les couches :
+Couches 7 à 5 : Données (message)
+Couche 4 : Segment (TCP) ou Datagramme (UDP)
+Couche 3 : Paquet IP
+Couche 2 : Trame
+Couche 1 : Bits → Signaux physiques
+C'est cette transformation progressive qu'on appelle l'encapsulation. À la réception, le processus inverse s'appelle la désencapsulation.
+
+
