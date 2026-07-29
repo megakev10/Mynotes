@@ -4,14 +4,14 @@ Aujourd'hui debute mon aventure avec le reseau informatique.
 
 >> le "switch" est un appareil qui permet de mettre en reseau plus de 02 PC en utilisant des cables.
 >> A la difference du "hub", avec un "switch", les donnees envoyees vers un destinataire ne sont recues que par lui.
->> Dans un reseau, les qppqreils peuvent savoir s'ils sont en local ou dans un reseau etendu (WAN) grace au masque de sous reseau. Par exemple --PC1: 192.168.13.4; PC2: 192.168.13.8; PC3: 192.168.5.12 et le masque de sous reseau est 
+>> Dans un reseau, les appqreils peuvent savoir s'ils sont en local ou dans un reseau etendu (WAN) grace au masque de sous reseau. Par exemple --PC1: 192.168.13.4; PC2: 192.168.13.8; PC3: 192.168.5.12 et le masque de sous reseau est 
 255.255.255.0-- En fait PC1 et PC2 sont en reseau local (LAN) et PC3 est sur un reseau plus etendu. ?? Le masque ici "255.255.255.0" signifie que si les addr ip ont les memes 3 premiers nombres, ils sont dans le meme reseau.
->> Le routeur est le composant qui assure la connexcion entre unreseau local et un autre ou avec un  WAN, tres souvent internet.
+>> Le routeur est le composant qui assure la connexcion entre un reseau local et un autre ou avec un  WAN, tres souvent internet.
 >> le routeur possede un serveur DHCP pour attribuer des addresses ip dynamiques aux appareils qui lui sont connectes, mais on peut toujours utiliser des addr statiques ( pour des cas critiques comme des serveurs)
 >> Pour etablir un reseau, on peut utiliser:
 	- Des cables Ethernet (RJ445): connexion fiable, mais limite de portee a 100 m pour garder une bonne com.
 	- Un WiFi: Ondes radios a 2.4 GHz ( lent, robuste) ou a 5G (plus rapide mais faible portee et faible robustesse).
-	- Des CPL (courants porteurs de ligne): On profite directement des instrallations elevtriques pour transporter les signaux. Pas tres fiable, connecteeurs specialises mis sur la meme phase
+	- Des CPL (courants porteurs de ligne): On profite directement des installations elevtriques pour transporter les signaux. Pas tres fiable, connecteeurs specialises mis sur la meme phase
 
 Jeudi 23/07/2026
 
@@ -19,21 +19,21 @@ Modele OSI.
 >> Le modele OSI(Open systems interconnection) est une norme conceptuelle qui divise la communication reseau en 07 couches.  
 >> Ces couches se presentent ainsi:
 
-	Couche			A l'emission											A la reception						Protocoles
+	Couche			A l'emission																									A la reception										Protocoles
 
-7. Application       L'application crée les données à envoyer (HTTP, e-mail, etc.)					L'application utilise les données reçues.				HTTP, HTTPS, FTP, SMTP, DNS, MQTT
+7. Application       L'application crée les données à envoyer (HTTP, e-mail, etc.)										L'application utilise les données reçues.				HTTP, HTTPS, FTP, SMTP, DNS, MQTT
 
-6. Présentation	     Chiffre, compresse ou convertit les données dans un format standard.				Déchiffre, décompresse et reconvertit les données.			TLS/SSL, JPEG, PNG, ASCII, UTF-8
+6. Présentation	     Chiffre, compresse ou convertit les données dans un format standard.								Déchiffre, décompresse et reconvertit les données.			TLS/SSL, JPEG, PNG, ASCII, UTF-8
 
-5. Session		Ouvre, gère et synchronise la session de communication.						Maintient ou ferme la session.						RPC, NetBIOS, SIP
+5. Session			Ouvre, gère et synchronise la session de communication.												Maintient ou ferme la session.									RPC, NetBIOS, SIP
 
-4. Transport		Découpe les données en segments et assure leur livraison (ou non).				Réassemble les segments et vérifie leur intégrité.			TCP, UDP
+4. Transport		Découpe les données en segments et assure leur livraison (ou non).									Réassemble les segments et vérifie leur intégrité.					TCP, UDP
 	
-3. Réseau		Ajoute les adresses IP et choisit le chemin vers le destinataire.				Lit l'adresse IP et remet le paquet à la couche transport.		IPv4, IPv6, ICMP
+3. Réseau			Ajoute les adresses IP et choisit le chemin vers le destinataire.									Lit l'adresse IP et remet le paquet à la couche transport.			IPv4, IPv6, ICMP
 
-2. Liaison de données	Encapsule le paquet dans une trame, ajoute les adresses MAC et détecte les erreurs locales.	Vérifie la trame, contrôle les erreurs et extrait le paquet IP.		Ethernet (IEEE 802.3), Wi-Fi (IEEE 802.11), PPP
+2. Liaison de données	Encapsule le paquet dans une trame, ajoute les adresses MAC et détecte les erreurs locales.		Vérifie la trame, contrôle les erreurs et extrait le paquet IP.		Ethernet (IEEE 802.3), Wi-Fi (IEEE 802.11), PPP
 
-1. Physique		Transforme les bits en signaux électriques, lumineux ou en ondes radio et les transmet.		Transforme les signaux reçus en bits et  envoie à la couche liaison. 	Ethernet (partie physique), Wi-Fi (partie radio), Fibre optique, Bluetooth
+1. Physique		Transforme les bits en signaux électriques, lumineux ou en ondes radio et les transmet.					Transforme les signaux reçus en bits et  envoie à la couche liaison. 	Ethernet (partie physique), Wi-Fi (partie radio), Fibre optique, Bluetooth
 
 Une remarque très importante, les données changent de "nom" au fur et à mesure qu'elles descendent les couches :
 Couches 7 à 5 : Données (message)
@@ -42,5 +42,56 @@ Couche 3 : Paquet IP
 Couche 2 : Trame
 Couche 1 : Bits → Signaux physiques
 C'est cette transformation progressive qu'on appelle l'encapsulation. À la réception, le processus inverse s'appelle la désencapsulation.
+Seulement, le modele OSI est totalement theorique. Dans la realite, on implemente ce qu'on appelle la pile TCP/IP presentee en 04 couches:
+1.	Application regoupant les couches 7,6 et 5 du modele OSI;
+2.	Transport qui ne change pas;
+3.	Internet remplace la couche reseau mais c'est la misma cosa;
+4.	Acces reseau regroupe liaison de donnees et la couche physique.
+
+25/07/2026
+Etudions les VLAN.
+>> Un VLAN (virtual local area network) est comme le dit son nom, un reseau local virtuel. Ceux sont des reseaux separes logiquement au sein d'un meme LAN.
+>> Les ordinateurs sont connectes ensemble via un switch et forment donc un LAN. Pour les separer de sorte a connectes juste certains entre eux, on cree donc des VLAN.
+>> Les equipements d'un meme VLAN sont dans un meme domaine de diffusion (broadcast domain).
+>> Certains switch permettent une configuration de VLAN et d'autres non.
+>> La configuration consiste essentiellement a nommer chaque VLAN et attribuer des ports a chacun. Ainsi le switch sait comment faire transiter les donnees suivant les VLAN.
+>> Si on a plusieurs switches comportant des elements d'un meme VLAN sur chacun d'entre eux, on utilise une connection "Trunk" entre eux pour permettre la communication entre ces elements.
+>> Il faut distinguer les ports "Trunk" qui peuvent connecter les elements d'un VLAN separes sur des switches differents, des ports "Acces" qui n'assurent que la connection pour un seul meme reseau.
+>> Avec un Trunk port, les donnees ont sur leur header un VLAN tag pour reconnaitre a quel VLAN elles appartiennent.
+>> Le VLAN permet de reduire le materiel necessaire (un switch, plusieurs reseaux), de renforcer la securite et la confidentialite ainsi que de reduire les flux de trafics inutiles. La separation
+permet egalement d'augmenter la vitesse de communication entre les elements mis ensemble.
+>> Pour connecter plusieurs VLAN entre eux, on utilise un routeur ou un switch de niveau 3 (couche reseau du modele OSI).
+
+Etudions les addresses IP.
+>> Une adresse IP (IP pour Internet Protocol) est une suite de caracteres permettant d'identifier un equipement particulier dans un reseau operant a la couche 03 du modele OSI ou TCP/IP.
+>> Il existe les adresses IPv4 (xxx.xxx.xxx.xxx avec xxx allant de 0 a 255) et IPv6 (xxx.xxx.xxx.xxx.xxx.xxx ou les x sont des caracteres hexadecimaux).
+>> IPv6 est plus recent et est la pour palier a la peinurie des IPv4.
+>> Les adresses publiques sont celles attribuees a la box (routeur) par le FAI pour communiquer sur intenet. C'est elle qui est visible depuis internet. 
+>> Les addr IP privees (environ 15% des adresses IP) sont pour les equipements d'un VLAN. Elles sont attribuees via un reseau (en DHCP ou en statiques) ou un serveur DHCP.
+>> Donc sans routeur ou serveur DHCP, juste une connection avec un switch (niveau 2), on a pas d'addr IP. 
+>> Dans le cas d'un reseau de niveau 2, les equipements peuvent s'echanger des donnees via des protocoles comme ARP  ou NetBIOS directement avec leurs addr MAC.
+>> Certaines addr IP privees sont reservees par les FAI pour leurs usages perso.
+>> Un routeur a autant d'addr IP privees que de reseau auquel il appartient mais une seule IP publique.
+>> Techniquement un smartphone peut devenir un "mini routeur" (via un partage de connexion, il a l'IP publique et toute les donnees transitent par lui).
+
+Etudions le DNS
+>> Le DNS (Domain name system) est un protocle qui permet d'associer des addr IP a des noms de domaines.
+>> Lorsqu'on fait une recherche dans un navigateur, pour nous amener vers la page correspondante, le navigateur contacte l'addr IP du serveur qui heberge cette page.
+>> Sauf que on entre generalement pas une adresse mais plutot un nom de domaine genre "www.google.com". 
+>> Le navigateur retrouve donc l'IP correspondante via le DNS comme on retrouve un numero sur un annuaire. Le process est le suivant:
+					
+	www.google.com							|--(1)--> Serveur racine (.): il renvoi les addr des serveurs des extensions
+		|									|
+		v									|--(2)--> Serveur DNS de 1er niveau (.com, .org, .cm, etc): il renvoi les addr des serveurs de noms
+Navigateur (PC)-->Serveur DNS recursif ---->|
+											|--(3)--> Serveur DNS de 2nd niveau (google, youtube, etc): il renvoi l'adresse des sous domaines
+											|
+											|--(4)--> Serveur de sous domaine (www, fr, de): la page est hebergee ici
+
+>> Chaque serveur connait l'adresse du domaine directement en dessous.
+>> L'addr du serveur DNS recursif est fournit sur la box par le FAI ou est correspond a un serveur DNS publique comme pour Open DNS par exemple.  
+>> Techniquement en tapant l'addr IP directement, on pourrait acceder au site correspondant. 
+>> Sauf que de nos jours, les grands sites utilisent des signatures HTTPS sur les noms de domaine qui ne sont pas renvoyees sur les IP. 
+
 
 
