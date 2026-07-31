@@ -1,0 +1,12 @@
+Diagnostic et reparation d'un onduleur
+
+Objectif1: connaitre les caracteristiques de l'appareil
+Actions: lire la plaque signaletique
+Resultats et observations: 
+- puissance de sortie maximale: 1000W, tension d'entree: 12v, sortie: 220/240V, sortie USB: 5V(500mA), output frequency: 50+-3Hz (modified sine wave), low voltage alarm: 10.2-10.8 V, Low voltage shutoff: 9.2-9.8V, High voltage shutoff: 15-16V, overcurrent protection: 90-95A, Courant a vide d'entree 12V CC: <0.45A, efficacite maxi:85%.
+
+Objectif 2: Identifier les causes de dysfonctionnement
+		Actions 								Resultats
+Diagnostic des fusibles								fusibles en bon etat
+Diagnostic des transistors de puissance						02 transistors potentiellement endommages, 02 autres un peu bizarres
+

@@ -1,0 +1,26 @@
+Refaire un systeme windows sur un lenovo thinkpad 
+
+Caracteristiques du PC: Lenovo Thinkpad core m3 8th generation
+Ressources a disposition: cle USB 8Go, WiFi a gogo
+Soucis rencontre: le proprietaire a oublie ses mots de passe (vraiment c'est un tintin)
+Soution choisie: Refaire le systeme
+Mise en place:
+>> Telechagement de l'iso de windows11 (Win11_25H2_French_x64_v2.iso) sur le site officiel de Microsoft.
+>> Telechargement du ventoy sur le site officiel.
+>> Extraction du dossier de ventoy et ouvrir jusqu'au repertoire contenant pleins de dossiers.
+>> Ouverture du terminal et tapement de "sudo ./VentoyGUI.x86_64".
+>> Insertion de la cle, la choisir dans l'interface graphique qui se lance puis taper sur "install": la cle est formatee.
+>> Copier-coller l'"iso" dans la cle.
+>> Au demarrage du PC, taper "Enter", aller dans "startup" et changer l'ordre de bootage. Mettre la cle en 1er (...dans mon cas). Puis F10 (save and exit).
+>> Redemarrage du PC. Choix de l'option 1 ou 2. Le reste est pour des reparations plus specifiques.
+>> Suivre la procedure et c'est bon.
+
+Difficultes rencontrees et solutions trouvees:
+-Le "Secure boot" refuse l'installation:
+	>> redemarrage-Enter(interrupt normal startup mode)-security-secure boot -> Disable
+	>> Formater la cle en secure boot avec ventoy
+- UEFI file not found:
+	>> La c'est quand tu n'as pas le bon "iso", peut etre "Win11_25H2_French_Arm64_v2.iso" alors que le PC a un processeur AMD / X86.
+- Probleme de partition : "Le disque sélectionné a une table de partition MBR. Sur les systèmes EFI, le système d'exploitation ne peut être installé que sur des disques GPT"
+	>> "Fn+shift+F10" - "diskpart" - "list disk" // on prend le disque sur lequel on veut installer// - "clean" - "convert gpt" - "exit" 2x
+	>> On relance et on suit la procedure.

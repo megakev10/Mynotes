@@ -1,0 +1,29 @@
+Ce guide represente mon mode d'emploi pour fournir des projets proprement documentes.
+
+Phase 1: Terminer et tester le code
+>> Apres etudes et structurations, je code et je commente au fur et a mesure
+>> Je verifie le fonctionnement.
+
+Phase 2: Nettoyage
+>> je supprime les anciennes fonctions et variables inutiles.
+>> Je renomme ce qui n'est pas tres explicite.
+>> J'enleve les commentaires inutiles.
+
+Phase 3: Nouveaux commentaires pro
+>> Pendant que j'enleve les commentaires inutiles, je place des commentaires plus pro suivant le style suivant:
+	- @brief: resume du role
+	- @details: eplications plus completes (si necessaires)
+	- @param: description des parametres
+	- @return: les valeurs de retour des fonctions
+	- @note: remarques importantes
+	- @warning: precautions et limites
+
+Phase 4: Documentation pro
+>> Doxygen dans la place: creation du Doxyfile.
+>> Configurations et exclusions
+>> generation des pages de doc
+
+Phase 5: Documentation users
+>> Guide d'installation, de compilation
+>> Lancement du serveur web
+>> Procedure de tests

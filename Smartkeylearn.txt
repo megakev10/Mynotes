@@ -61,3 +61,130 @@ Trame envoyée : 7F5A05030200000000410000660D0A
 Maintenant reste plus que l'echange de cles.
 J'ai recu une serrure toute neuve et j'ai teste mon script de "check admin" dessus mais la reponse est assez surprenante: Reponse recue (handle 0000fff4-0000-1000-8000-00805f9b34fb (Handle: 11): Vendor specific) : 7F5A05030900010001540000710D0A
 C'est 15 octets et la question c'est qu'est ce qui manque? le payload ou le crc? Sauf que le calcul du crc donne 96 pas 71. Et si la serrure neuve se comporte autrement? Je vais envoyer une trame avec ma cle perso pour voir comment ca repond. 
+21/05/2026
+J'ai teste l'envoie de cle a la serrure mais sa reponse reste la meme. Par contre j'ai appris des trucs:
+>> Pour generer une paire de cles, on utilise en python, cryptography (pip install cryptographie) de cette facon:
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import serialization
+>> J'ai travaille avec jadx, un outil qui m'a permis de decompresser l'apk de ttlock et de voir ses fichiers internes et codes sources. Jadx se telecharge sur github, lien:   https://github.com/skylot/jadx; 	https://github.com/skylot/jadx/releases et 	https://github.com/skylot/jadx/wiki
+Une fois decompresse, on fait: cd jadx-1.5.5/bin (dans le rep contenant le dossier-j'ai pris la version 1.5.5), puis "./jadx-gui". Apres on recupere l'apk dedans.
+>> Pour proteger leurs app de tentatives de reverse comme la mienne, les developpeurs de ttlock app ont utilises un obfuscateur. Il masque les noms de variables, de caracteres, en fait tout ce qu'il peut pour rendre le code illisible pour un humain mais toujours exploitable pour la machine.
+>> J'ai beaucoup a apprendre sinon je vais tourner en rond.
+Vendredi 22 Mai 2026
+Objectifs de la session: 
+	1- Obtenir la sequence de communication et les commandes correctes pour l'appairage avec la serrure par sniffing
+	2- Verifier si la serrure repond autrement une fois appairee a l'app
+>> Avec l'outil "btmon (bt monitor), j'ai "ecoute" la communication entre la serrure et l'appli ttlock pendant la phase d'appairage. cmd: sudo btmon -w nom_fichier.log
+>> J'ai appaire la serrure a l'appli ttlock et je lui ai envoye un "0x41" (check admin)
+Resultats:
+>> Plusieurs ecoutes m'ont permis d'avoir plusieurs fichiers ".log"
+>> Une analyse avec wireshark revele que ces logs representent en fait l'activite du systeme lui meme.
+>> Rien d'utile n'a encore ete trouve par sniffing
+>> La serrure repond au check admin quand elle est deja appairee a l'app.
+Observations & Apprentissages:
+>> Les logs captures sont presques identiques a quelques details pres.
+>> L'outil "btmon" permet de faire un ecoute passif de communication bt ce qui le rend tres efficace pour ce travail.
+>> Quand la serrure a deja un admin, elle repond quand meme au check admin. Pourtant toute neuve ou reinitialisee, c'est toujours le fameux 7F5A05030900010001540000710D0A.
+Next step:
+Essayer un "brute force" pour l'appairage.
+Mardi 26 Mai 2026
+Session de lundi 25 Mai 2026
+Objectif de la session: Tenter l'appairage avec la serrure via un brute force
+>> J'ai modifie le code qui envoyais les commandes "0x41" et "0x43" (Skm2.1) pour envoyer une liste de commandes (entre 0x41 et 0x71) a la place avec la cle generee dans un premier temps puis sans cle (payload vide).
+Resultats:
+>> Meme reponse: "7F5A05030900010001540000710D0A". Pas de cle obtenue de la serrure, rien.
+Observations & apprentissages:
+>> Aucune commande entre "0x41" et "0x71" ne fonctionne ou peut etre pas ou la sequence de communication attendue par la serrure n'est pas respectee.
+>> La serrure est allumee pour un petit delais et passe ce temps elle retourne en veille. Sauf que a ce moment, la communication est interrompue.
+ 
+ Session du 26 Mai (aujourd'hui)
+ Objectifs de la session: 
+ 	1- Refaire un brute force avec plus de commandes
+ 	2- Reanalyser les logs du sniffing par btmon
+ 	3- Faire un sniffing par telephone & analyser
+ 	4- Refaire une analyse des codes de ttlock avec un meilleur outil
+ Actions:
+>> brute force de "0x00" a "0x71" 
+>> Tentative de sniff via mon honor 8x puis mon itel A58:
+  - Activer le mode dev puis le "USB debug" et le "MTP"
+  - Download "adb" sur PC puis "adb devices". A ce niveau, mon honor ne fonctionne pas mais itel yep.
+  - Je n'arrive pas encore a voir les captures et je suis epuise mentalement.
+>> J'ai essaye la commande "adb bugreport BTlogs" pour recuperer le resultat du sniff
+Resultats:
+>> Enfin j'ai pu capturer la communication entre mon A58 et ma serrure grace a la derniere action. Passe sur wireshark, je vois bien la conversation (je vois mais je comprend rien😅)
+ Observations & apprentissages:
+>> La capture faite directement par le telephone hote de l'appli est plus efficace que celle par le PC. Surement parceque le PC ne recupere que les donnees radio qui passent par la.
+>> Huawei requiert pour des procedes comme un sniffing et connexion avec "adb" des outils speciaux qu'ils livrent directement dans leur suite perso.
+>> ADB (Android debug bridge) est un outil qui permet au PC de communiquer avec un telephone. Il permet de verifier la connexion, copier les fichiers, faire des captures (comme mon cas). C'est a creuser encore bien sur.
+Principe:
+[ Ton PC ] <--USB--> [ Téléphone Android ]
+     ↑                    ↑
+   ADB client         ADB daemon
+                      (serveur sur le téléphone)
+Mardi 02/06/2026
+Projet Smart-key mis en pause pour les projets de stage.
+Projet: prototype controle d'acces 
+Objectif de la session: mettre en place la solution RFID 
+Actions :
+ - Cablage du module RFID & microcontroleur;
+ - Mise en place de l'environnement de travail sur platformio;
+ - Codage;
+ - Tests.
+ Resultats & observations:
+ - Le module s'allume sans soucis;
+ - Platformio s'installe bien mais necessite un venv pour "pio" (vu que c'est un paquet python non inclus dans apt: python3 -m pip install -- platformio)
+ - Je n'ai pas pu termine le travail, pas de connexion pour telecharger la biblio.
+ Evenements innattendue:
+ coupure de courant
+ Mercredi 03/06/2026
+ Objectif de la session: tester la reconnaissance de la carte RFID et la lecture de l'uid
+ Actions:
+ - Checker le firmware version du module RFID via mon PC (biblio deja presente);
+ - Lire et afficher l'uid des badges.
+ Resultats & observations:
+ - Version obtenue 0x98 (v2.1);
+ - PC off, j'ai pas pu lire l'uid.
+ Jeudi 04/06/2026
+ Objectif de la session 1: tester la lecture de l'uid
+ Actions:
+ - Implementer le code pour lire et afficher l'uid des badges.
+ Resultats & observations:
+ - Aucune lecture reussie
+ Objectif de la session 2: Trouver pourquoi la lecture echoue
+ Actions:
+ - Recherches rapides sur le sujet;
+ - Implementation des solutions possibles.
+ Resultats & observations:
+ - Les causes possibles sont: mauvais cablage spi, biblio non compatible et module HS
+ - Le spi est bien cable, l'alim est a 3v3. Le Miso est a ~0v (ce serait pas normal), SDA (SS) 3v3, SCK 0v, Mosi 0v et RST 3v3
+ Je vais d'abord essayer le lecteur d'empreinte avant de revenir a ceci.
+ Objectif de la session2: Faire fonctionner l'authentification par empreinte
+ Sous session 2.1: Recherches des connaissances necessaire
+ Actions:
+ - Suivre des videos sur le sujet;
+ - Discuter avec chatg;
+ - Survoler la doc si necessaire.
+ Resultats & observations:
+ - Le cablage est tres simple juste noter : TX -> RX et vice versa.
+ - La biblio est fournie par adafruit (Adafruit Fingerprint sensor Library@2.1.3) avec des examples de codes.
+ Sous session 2.2: Mise en pratique
+ Actions:
+ - Realiser le cablage module-microcontroleur;
+ - Implementer le code d'enregistrement fourni par la biblio;
+ - Implementerle code de reconnaissance avec mes modifs perso.
+ 10/06/2026
+ resultats du travail du 09/06/2026
+ - Cablage reussi (ESP32: TX2/RX2);
+ - Enregistrement et reconnaissances reussis;
+ - Modification de la reconnaissance pour signaler par un "beep" chaque cas;
+ - Modification de l'enregistrement pour recuperer le nom.
+ - La biblio possede une methode pour enregistrer les templates avec un ID#. Pour associer un nom, il faudra toucher a cette methode ou en creer une autre specifique;
+ - la biblio est fortement oriente objet.
+ Objectif de la session: Ajouter la reconnaissance d'empreintes par le nom 
+ Sous session 1.1: Comprendre la logique de fonctionnement de la biblio
+ Actions:
+ - Etudier meticuleusement les codes fournis avec la biblio.
+ Resultats & observations:
+ - Plein de POO dans les modules de la biblio;
+ - le systeme est bien structure autour de methodes dependantes les unes des autres;
+ - le storage est fait avec le ID directement dans le module.

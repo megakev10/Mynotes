@@ -1,0 +1,12 @@
+10/06/2026
+Bon j'ai pas note pas mal de notions mais ceci est inignorable
+>> Un pointeur est une  variable qui pointe vers l'addresse d'une autre variable;
+>> "int *p;" est la declaration du pointeur "p". et si ensuite on fait "p = &a", on affecte l'adresse de "a" a "p". On peut aussi faire "int *p = a", c'est idem.
+>> Dans un tableau, "Tab[]" par exemple, "Tab" pointe vers le 1er elt soit "Tab[0]". "Tab" vaut donc l'addresse de "Tab[0]";
+>> Si on a "int *p = Tab[i] alors... Donc p+j pointe vers Tab[i+j];
+>> Si "p = Tab", p+i vaut valeur de Tab + i x sizeof(type des elts du tableau). les "int" valent 04 bits et les doubles 08 bits. Notons ici qu'il s'agit bien sur des valeurs des addresses.
+>> Un pointeur peut pointer n'importe quoi du moment que ce m'importe quoi ai une addresse (donc meme une fonction). J'y reviendrais plus tard.
+18/06/2026
+>> Bon Aujourd'hui j'ai finalement attaque la biblio de Adafruit. J'ai compris une bonne partie; grace a mon recyclage en C++, c'etait pas trop bizarre.
+>> IL me faut toutefois bien comprendre les fonctions "writestructurepacket" et "getstructurepacket". 
+>> J'ai choisis la creation de fichiers externent (.h et .cpp) pour le stockage des empreintes avec des noms. Je pense m'y pencher ce soir. 
