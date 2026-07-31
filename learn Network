@@ -109,5 +109,9 @@ Etudions le HTTPS:
 	- Maintenant, les 02 ont une cle commune et peuvent donc communiquer comme en symetrique.
 * Les certificats:
 	- La methode de securite ennoncee plus haut est tres efficace mais a une faille: si quelqu'un se fait passer pour le serveur contacte, il peut envoyer sa cle et recevoir celle du client et finalement toute la securite est compromise.
-	- Entre en jeu les certificats. Ceux sont des 
+	- Entre en jeu les certificats. Un certificat est une sorte de passeport numerique permettant d'authentifier un serveur web. 
+	- De maniere simplifiee, il fonctionne ainsi:
+	1/ Le client demande la communication au serveur hebergeant le site souhaite
+	2/ Le site envoie au navigateur 02 certificats (un certificat "intermediaire" et un certificat "du site en question")
+	3/ Le navigateur utilise la cle publique contenue dans certificat de l'autorite de certification racine (root CA) specifiee dans le certificat intermediaire pour dechiffrer l'empreinte 
 
